@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { withStyles } from "@material-ui/core/styles";
 import PropTypes from 'prop-types';
-import { List, ListItem, ListItemIcon, ListItemText, Divider, Typography } from '@material-ui/core';
+import { List, ListItem, ListItemIcon, ListItemText, Divider } from '@material-ui/core';
 import HomeIcon from "@material-ui/icons/Home";
 import MoneyOffIcon from "@material-ui/icons/MoneyOff";
 import ListAlt from "@material-ui/icons/ListAlt";
@@ -70,7 +70,7 @@ class Links extends Component {
   }
 }
 
-NavigationLinks.propTypes = {
+Links.propTypes = {
   classes: PropTypes.object.isRequired
 }
 
