@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/carlolim/admin1password1/precache-manifest.9bf043b05a88abcfa0ab254e06d972d8.js"
+  "/admin1password1/precache-manifest.7674349983ac60c9ca004dcaf27221af.js"
 );
 
 workbox.clientsClaim();
@@ -28,7 +28,7 @@ self.__precacheManifest = [].concat(self.__precacheManifest || []);
 workbox.precaching.suppressWarnings();
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
 
-workbox.routing.registerNavigationRoute("/carlolim/admin1password1/index.html", {
+workbox.routing.registerNavigationRoute("/admin1password1/index.html", {
   
   blacklist: [/^\/_/,/\/[^\/]+\.[^\/]+$/],
 });

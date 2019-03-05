@@ -1,14 +1,14 @@
 {
-  "main.css": "/carlolim/admin1password1/static/css/main.341b03c3.chunk.css",
-  "main.js": "/carlolim/admin1password1/static/js/main.250e9028.chunk.js",
-  "main.js.map": "/carlolim/admin1password1/static/js/main.250e9028.chunk.js.map",
-  "runtime~main.js": "/carlolim/admin1password1/static/js/runtime~main.7a97462d.js",
-  "runtime~main.js.map": "/carlolim/admin1password1/static/js/runtime~main.7a97462d.js.map",
-  "static/js/2.5bf9b2cd.chunk.js": "/carlolim/admin1password1/static/js/2.5bf9b2cd.chunk.js",
-  "static/js/2.5bf9b2cd.chunk.js.map": "/carlolim/admin1password1/static/js/2.5bf9b2cd.chunk.js.map",
-  "index.html": "/carlolim/admin1password1/index.html",
-  "precache-manifest.9bf043b05a88abcfa0ab254e06d972d8.js": "/carlolim/admin1password1/precache-manifest.9bf043b05a88abcfa0ab254e06d972d8.js",
-  "service-worker.js": "/carlolim/admin1password1/service-worker.js",
-  "static/css/main.341b03c3.chunk.css.map": "/carlolim/admin1password1/static/css/main.341b03c3.chunk.css.map",
-  "static/media/logo.svg": "/carlolim/admin1password1/static/media/logo.5d5d9eef.svg"
+  "main.css": "/admin1password1/static/css/main.341b03c3.chunk.css",
+  "main.js": "/admin1password1/static/js/main.f9f1df03.chunk.js",
+  "main.js.map": "/admin1password1/static/js/main.f9f1df03.chunk.js.map",
+  "runtime~main.js": "/admin1password1/static/js/runtime~main.577c187a.js",
+  "runtime~main.js.map": "/admin1password1/static/js/runtime~main.577c187a.js.map",
+  "static/js/2.5bf9b2cd.chunk.js": "/admin1password1/static/js/2.5bf9b2cd.chunk.js",
+  "static/js/2.5bf9b2cd.chunk.js.map": "/admin1password1/static/js/2.5bf9b2cd.chunk.js.map",
+  "index.html": "/admin1password1/index.html",
+  "precache-manifest.7674349983ac60c9ca004dcaf27221af.js": "/admin1password1/precache-manifest.7674349983ac60c9ca004dcaf27221af.js",
+  "service-worker.js": "/admin1password1/service-worker.js",
+  "static/css/main.341b03c3.chunk.css.map": "/admin1password1/static/css/main.341b03c3.chunk.css.map",
+  "static/media/logo.svg": "/admin1password1/static/media/logo.5d5d9eef.svg"
 }
