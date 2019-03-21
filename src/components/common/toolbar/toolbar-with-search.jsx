@@ -16,6 +16,7 @@ import Links from "../navigation/links";
 const styles = theme => ({
     root: {
         width: '100%',
+        paddingTop: 65
     },
     grow: {
         flexGrow: 1,

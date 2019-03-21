@@ -5,6 +5,7 @@ import Routes from "./components/common/routes";
 import 'typeface-roboto';
 import { createBrowserHistory, createHashHistory } from 'history';
 import { Router } from 'react-router-dom';
+import "./index.css";
 
 const configureHistory = () => {
     return window.matchMedia('(display-mode: standalone)').matches

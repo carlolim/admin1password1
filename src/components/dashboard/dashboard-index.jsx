@@ -1,19 +1,25 @@
 import React, { Component } from "react";
 import { withStyles } from "@material-ui/core/styles";
 import PropTypes from 'prop-types';
-import { Typography } from "@material-ui/core";
+import { Typography, Grid, Paper } from "@material-ui/core";
 import ToolbarWithSearch from "../common/toolbar/toolbar-with-search";
 
 const styles = {
-    
+
 }
 
 class DashboardIndex extends Component {
-    render () {
+    render() {
         return (
             <>
                 <ToolbarWithSearch buttons={[]} title="Digital ID ng Pinas" />
-                <Typography>dashboard index</Typography>
+                <Grid container spacing={8}>
+                    {[0, 1, 2].map(value => (
+                        <Grid xs key={value} item>
+                            <Typography>asdasdasd</Typography>
+                        </Grid>
+                    ))}
+                </Grid>
             </>
         )
     }
