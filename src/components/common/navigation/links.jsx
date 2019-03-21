@@ -4,10 +4,11 @@ import { withStyles } from "@material-ui/core/styles";
 import PropTypes from 'prop-types';
 import { List, ListItem, ListItemIcon, ListItemText, Divider } from '@material-ui/core';
 import HomeIcon from "@material-ui/icons/Home";
-import MoneyOffIcon from "@material-ui/icons/MoneyOff";
-import ListAlt from "@material-ui/icons/ListAlt";
-import Settings from "@material-ui/icons/Settings";
-import File from "@material-ui/icons/InsertDriveFile";
+import LockIcon from '@material-ui/icons/Lock';
+import CardIcon from '@material-ui/icons/CreditCard';
+import WorkIcon from '@material-ui/icons/Work';
+import GovernmentIcon from '@material-ui/icons/AccountBalance';
+import PersonalInfoIcon from "@material-ui/icons/AssignmentInd";
 
 const styles = {
   drawer: {
@@ -28,40 +29,47 @@ class Links extends Component {
               <ListItemIcon>
                 <HomeIcon />
               </ListItemIcon>
-              <ListItemText primary="Dashboard" />
+              <ListItemText primary="Home" />
             </ListItem>
           </Link>
-          <Link to='/expense' className={this.props.classes.navLink}>
+          <Link to='/personal' className={this.props.classes.navLink}>
             <ListItem>
               <ListItemIcon>
-                <MoneyOffIcon />
+                <PersonalInfoIcon />
               </ListItemIcon>
-              <ListItemText primary="Expense" />
+              <ListItemText primary="Personal info" />
             </ListItem>
           </Link>
-          <Link to='/expensetemplates' className={this.props.classes.navLink}>
+          <Link to='/government' className={this.props.classes.navLink}>
             <ListItem>
               <ListItemIcon>
-                <File />
+                <GovernmentIcon />
               </ListItemIcon>
-              <ListItemText primary="Expense templates" />
+              <ListItemText primary="Government info" />
             </ListItem>
           </Link>
-          <Link to='/budget' className={this.props.classes.navLink}>
+          <Link to='/work' className={this.props.classes.navLink}>
             <ListItem>
               <ListItemIcon>
-                <ListAlt />
+                <WorkIcon />
               </ListItemIcon>
-              <ListItemText primary="Budget" />
+              <ListItemText primary="Work info" />
             </ListItem>
           </Link>
-          <Divider />
-          <Link to='/settings' className={this.props.classes.navLink}>
+          <Link to='/bankaccounts' className={this.props.classes.navLink}>
             <ListItem>
               <ListItemIcon>
-                <Settings />
+                <CardIcon />
               </ListItemIcon>
-              <ListItemText primary="Settings" />
+              <ListItemText primary="Bank accounts" />
+            </ListItem>
+          </Link>
+          <Link to='/passwords' className={this.props.classes.navLink}>
+            <ListItem>
+              <ListItemIcon>
+                <LockIcon />
+              </ListItemIcon>
+              <ListItemText primary="Passwords" />
             </ListItem>
           </Link>
         </List>

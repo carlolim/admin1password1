@@ -3,13 +3,13 @@ import { withStyles } from "@material-ui/core/styles";
 import PropTypes from 'prop-types';
 import { Typography } from "@material-ui/core";
 
-const styles = {
+const styles = theme => ({
     myClass: {
         font: 20,
         textAlign: 'center',
         width: '100%'
     }
-}
+});
 
 class Template extends Component {
     render () {
