@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { withStyles } from "@material-ui/core/styles";
 import PropTypes from 'prop-types';
-import { List, ListItem, ListItemIcon, ListItemText, Divider } from '@material-ui/core';
+import { List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
 import HomeIcon from "@material-ui/icons/Home";
 import LockIcon from '@material-ui/icons/Lock';
 import CardIcon from '@material-ui/icons/CreditCard';
