@@ -65,6 +65,14 @@ class PersonalInfo extends Component {
                             <ListItem button>
                                 <ListItemText primary={labelFragment('Civil status')} secondary={dataFragment('Single')} />
                             </ListItem>
+                            <Divider light />
+                            <ListItem button>
+                                <ListItemText primary={labelFragment('Nationality')} secondary={dataFragment('Filipino')} />
+                            </ListItem>
+                            <Divider light />
+                            <ListItem button>
+                                <ListItemText primary={labelFragment('Religion')} secondary={dataFragment('Liminismo')} />
+                            </ListItem>
                         </List>
                     </Paper>
 
