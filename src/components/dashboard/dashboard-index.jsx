@@ -9,6 +9,7 @@ import WorkIcon from '@material-ui/icons/Work';
 import GovernmentIcon from '@material-ui/icons/AccountBalance';
 import PersonalInfoIcon from "@material-ui/icons/AssignmentInd";
 import Toolbar from "../common/toolbar/toolbar-with-navigation";
+import NewRecord from "../common/new-record";
 
 const styles = theme => ({
     root: {
@@ -71,6 +72,7 @@ class DashboardIndex extends Component {
                         </Grid>
                     </Grid>
                 </div>
+                <NewRecord />
             </>
         )
     }

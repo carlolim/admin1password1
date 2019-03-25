@@ -6,7 +6,7 @@ import {
     Radio, RadioGroup, FormControlLabel,
     Select, MenuItem, InputLabel,
     ExpansionPanel, ExpansionPanelSummary, Typography,
-    ExpansionPanelDetails, Paper
+    ExpansionPanelDetails, Avatar
 } from "@material-ui/core";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import CardIcon from '@material-ui/icons/CreditCard';
@@ -14,8 +14,14 @@ import WorkIcon from '@material-ui/icons/Work';
 import GovernmentIcon from '@material-ui/icons/AccountBalance';
 import Toolbar from "../common/toolbar/toolbar-with-backbutton";
 import { genderEnum, civilStatusEnum } from "../../helpers/enums";
+import PicPlaceholder from "../../images/user.png";
 
 const styles = theme => ({
+    bigAvatar: {
+        margin: '0 auto',
+        width: 80,
+        height: 80,
+    },
     content: {
         padding: 20
     },
@@ -51,6 +57,7 @@ class New extends Component {
             <>
                 <Toolbar buttons={[]} title="New personal information" showBackButton={true} onBack={() => { this.props.history.goBack() }} />
                 <div className={this.props.classes.content}>
+                    <Avatar src={PicPlaceholder} className={this.props.classes.bigAvatar} />
                     <TextField
                         className={this.props.classes.textField}
                         label="Title"
