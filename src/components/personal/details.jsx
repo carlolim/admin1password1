@@ -171,7 +171,7 @@ class PersonalInfo extends Component {
                         <Typography variant="h6" align="center">Work Information</Typography>
                         <List component="nav">
                             <ListItem button>
-                                <ListItemText primary={labelFragment('Occupation')} secondary={dataFragment('Lead Software Engineer')} />
+                                <ListItemText primary={labelFragment('Job Title')} secondary={dataFragment('Lead Software Engineer')} />
                             </ListItem>
                             <Divider light />
                             <ListItem button>
