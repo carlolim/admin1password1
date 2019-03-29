@@ -30,7 +30,7 @@ class PersonalInfoInput extends Component {
             <>
                 <TextField
                     className={this.props.classes.textField}
-                    label="Title"
+                    label="Description"
                     margin="normal"
                 />
                 <TextField
