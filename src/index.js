@@ -6,6 +6,9 @@ import 'typeface-roboto';
 import { createBrowserHistory, createHashHistory } from 'history';
 import { Router } from 'react-router-dom';
 import "./index.css";
+import { initialize } from "./helpers/database";
+
+initialize();
 
 const configureHistory = () => {
     return window.matchMedia('(display-mode: standalone)').matches

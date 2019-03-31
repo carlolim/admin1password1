@@ -6,27 +6,23 @@ export const initialize = () => {
 
         if (!db.objectStoreNames.contains('personal')) {
             var table = db.createObjectStore("personal", { keyPath: "personalId", autoIncrement: true });
-            table.createIndex("title", "title", { unique: false });
-            table.createIndex("templateName", "templateName", { unique: false });
-            table.createIndex("amount", "amount", { unique: false });
-            table.createIndex("categoryId", "categoryId", { unique: false });
-            table.createIndex("accountId", "accountId", { unique: false });
             table.createIndex("description", "description", { unique: false });
+            table.createIndex("firstName", "firstName", { unique: false });
+            table.createIndex("lastName", "lastName", { unique: false });
+            table.createIndex("middleName", "middleName", { unique: false });
+            table.createIndex("contact", "contact", { unique: false });
+            table.createIndex("birthday", "birthday", { unique: false });
+            table.createIndex("picture", "picture", { unique: false });
+            table.createIndex("nationality", "nationality", { unique: false });
+            table.createIndex("gender", "gender", { unique: false });
+            table.createIndex("religion", "religion", { unique: false });
+            table.createIndex("civilStatus", "civilStatus", { unique: false });
         }
 
+        //SAMPLE UPGRADE
         // if (!db.objectStoreNames.contains('budget')) {
         //     var budgetTable = db.createObjectStore("budget", {keyPath: "budgetId", autoIncrement: true});
         //     budgetTable.createIndex("name", "name", { unique: false});
-        //     budgetTable.createIndex("repeat", "repeat", { unique: false});
-        //     budgetTable.createIndex("startDate", "startDate", { unique: false});
-        //     budgetTable.createIndex("endDate", "endDate", { unique: false});
-        //     budgetTable.createIndex("amount", "amount", { unique: false});
-        //     budgetTable.createIndex("accountIds", "accountIds", { unique: false});
-        //     budgetTable.createIndex("isActive", "isActive", { unique: false});
-        //     budgetTable.createIndex("categoryIds", "categoryIds", { unique: false});
-        //     budgetTable.createIndex("ledger", "ledger", { unique: false});
-        //     budgetTable.createIndex("noEndDate", "noEndDate", { unique: false});
-        //     budgetTable.createIndex("showInDashboard", "showInDashboard", { unique: false});
         // }
         // else {
         //     var budgetTable = event.currentTarget.transaction.objectStore("budget");

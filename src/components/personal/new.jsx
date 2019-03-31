@@ -1,10 +1,12 @@
 import React, { Component } from "react";
 import { withStyles } from "@material-ui/core/styles";
 import PropTypes from 'prop-types';
+import { insert } from "../../data-access/generic";
 import {
     ExpansionPanel, ExpansionPanelSummary, Typography,
-    ExpansionPanelDetails, Avatar, Button
+    ExpansionPanelDetails, Avatar, Button, IconButton
 } from "@material-ui/core";
+import DoneIcon from "@material-ui/icons/Done";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import CardIcon from '@material-ui/icons/CreditCard';
 import WorkIcon from '@material-ui/icons/Work';
@@ -15,6 +17,7 @@ import PersonalInfoInput from "./input";
 import GovernmentInput from "../government/input";
 import WorkInput from "../work/input";
 import BankInput from "../bank/input";
+import { hasValue } from "../../helpers/functions";
 
 const styles = theme => ({
     bigAvatar: {
@@ -45,7 +48,12 @@ class New extends Component {
     state = {
         expanded: null,
         picture: PicPlaceholder,
-        showRemovePicture: false
+        pictureBlob: null,
+        showRemovePicture: false,
+        personal: {
+            description: '', firstName: '', lastName: '', middleName: '', contact: '', birthday: '', picture: '', nationality: '', gender: 0, religion: '', civilStatus: 0,
+            errors: { description: false, firstName: false }
+        }
     }
 
     handleAccordionChange = panel => (event, expanded) => {
@@ -56,21 +64,60 @@ class New extends Component {
 
     handlePictureSelect = (event) => {
         if (event.target.files.length > 0) {
-            this.setState({ picture: URL.createObjectURL(event.target.files[0]), showRemovePicture: true })
+            if ((/image\/(gif|jpe?g|tiff|png)$/i).test(event.target.files[0].type)) {
+                const pic =  URL.createObjectURL(event.target.files[0]);
+                const reader = new FileReader();
+                reader.onload = e => {
+                    this.setState({ pictureBlob: e.target.result, picture: pic, showRemovePicture: true });
+                };
+                reader.readAsText(event.target.files[0]);
+            }
         }
     }
 
-    handleRemovePicture = () => {
-        this.setState({picture: PicPlaceholder, showRemovePicture: false});
+    handleRemovePicture = () => this.setState({ picture: PicPlaceholder, showRemovePicture: false });
+
+    handleChangePersonalInfo = (property, e) => this.setState({ ...this.state, personal: { ...this.state.personal, [property]: e.target.value } });
+
+    handleSave = async () => {
+        var data = this.state.personal;
+        var errors = { hasError: false, description: false, firstName: false };
+        delete data.errors;
+
+        if (!hasValue(data.description)) {
+            errors.hasError = true;
+            errors.description = true;
+        }
+        if (!hasValue(data.firstName)) {
+            errors.firstName = true;
+            errors.hasError = true;
+        }
+
+        if (errors.hasError) {
+            delete errors.hasError;
+            this.setState({ ...this.state, personal: { ...this.state.personal, errors } });
+        }
+        else {
+            data.birthday = hasValue(data.birthday) ? new Date(data.birthday) : null;
+            data.civilStatus = hasValue(data.civilStatus) ? Number(data.civilStatus) : 0;
+            data.gender = hasValue(data.gender) ? Number(data.gender) : 0;
+            data.picture = this.state.pictureBlob;
+            var result = await insert("personal", data);
+            if (result) this.props.history.push('/personal');
+        }
     }
 
     render() {
         return (
             <>
-                <Toolbar buttons={[]} title="New personal information" showBackButton={true} onBack={() => { this.props.history.goBack() }} />
+                <Toolbar buttons={[
+                    <IconButton color="inherit" onClick={this.handleSave}>
+                        <DoneIcon />
+                    </IconButton>
+                ]} title="New personal info" showBackButton={true} onBack={() => { this.props.history.goBack() }} />
                 <div className={this.props.classes.content}>
 
-                    <input onChange={this.handlePictureSelect.bind(this)} type="file" id="inputImage" style={{ display: 'none' }} />
+                    <input capture onChange={this.handlePictureSelect.bind(this)} type="file" accept="image/*" id="inputImage" style={{ display: 'none' }} />
 
                     <label htmlFor="inputImage">
                         <Avatar
@@ -81,10 +128,10 @@ class New extends Component {
                     {this.state.showRemovePicture ?
                         <div className={`text-center ${this.props.classes.padTop}`}>
                             <Button onClick={this.handleRemovePicture} size="small" variant="contained" color="secondary">remove picture</Button>
-                        </div> 
-                    : null}
+                        </div>
+                        : null}
 
-                    <PersonalInfoInput />
+                    <PersonalInfoInput data={this.state.personal} change={this.handleChangePersonalInfo} />
 
                     <div className={this.props.classes.padTop}>
                         <ExpansionPanel expanded={this.state.expanded === 'panel1'} onChange={this.handleAccordionChange('panel1')}>
