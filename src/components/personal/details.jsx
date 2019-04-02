@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { withStyles } from "@material-ui/core/styles";
 import PropTypes from 'prop-types';
+import moment from "moment";
 import {
     Avatar, Typography, IconButton,
     List, ListItem, ListItemText, Divider, Paper
@@ -10,6 +11,9 @@ import Toolbar from "../common/toolbar/toolbar-with-navigation";
 import PicPlaceholder from "../../images/user.png";
 import SearchBar from "../common/toolbar/searchbar";
 import NewRecord from "../common/new-record";
+import { selectById } from "../../data-access/generic";
+import { formatDate, hasValue, computeAge, getGender, getCivilStatus } from "../../helpers/functions";
+import { genderEnum, civilStatusEnum } from "../../helpers/enums";
 
 const styles = theme => ({
     bigAvatar: {
@@ -24,6 +28,26 @@ const styles = theme => ({
 });
 
 class PersonalInfo extends Component {
+    state = {
+        personal: {
+            picture: '', description: '', firstName: '', lastName: '', middleName: '', contact: '', birthday: '', picture: '', nationality: '', gender: 0, religion: '', civilStatus: 0
+        }
+    }
+
+    componentDidMount = async () => {
+        var personal = await selectById("personal", Number(this.props.match.params.id));
+        if (hasValue(personal)) {
+            this.setState({ ...this.state, personal });
+        }
+    }
+
+    handleDisplayPicture = () => {
+        let picture = this.state.personal.picture;
+        if (picture instanceof File) {
+            return URL.createObjectURL(picture);
+        }
+    };
+
     render() {
         return (
             <>
@@ -33,45 +57,45 @@ class PersonalInfo extends Component {
                 <SearchBar />
 
                 <div className="content">
-                    <Avatar src={PicPlaceholder} className={this.props.classes.bigAvatar} />
-                    <Typography variant="h6" align="center">Carlo Lim</Typography>
+                    <Avatar src={this.handleDisplayPicture()} className={this.props.classes.bigAvatar} />
+                    <Typography variant="h6" align="center">{this.state.firstName} {this.state.lastName}</Typography>
 
                     <Paper className={this.props.classes.paper} elevation={1}>
                         <List component="nav">
                             <ListItem button>
-                                <ListItemText primary={labelFragment('First name')} secondary={dataFragment('Carlo James')} />
+                                <ListItemText primary={labelFragment('First name')} secondary={dataFragment(this.state.personal.firstName)} />
                             </ListItem>
                             <Divider light />
                             <ListItem button>
-                                <ListItemText primary={labelFragment('Middle name')} secondary={dataFragment('Intila')} />
+                                <ListItemText primary={labelFragment('Middle name')} secondary={dataFragment(this.state.personal.middleName)} />
                             </ListItem>
                             <Divider light />
                             <ListItem button>
-                                <ListItemText primary={labelFragment('Last name')} secondary={dataFragment('Lim')} />
+                                <ListItemText primary={labelFragment('Last name')} secondary={dataFragment(this.state.personal.lastName)} />
                             </ListItem>
                             <Divider light />
                             <ListItem button>
-                                <ListItemText primary={labelFragment('Birthday')} secondary={dataFragment('October 09, 1992')} />
+                                <ListItemText primary={labelFragment('Birthday')} secondary={dataFragment(formatDate(this.state.personal.birthday))} />
                             </ListItem>
                             <Divider light />
                             <ListItem button>
-                                <ListItemText primary={labelFragment('Age')} secondary={dataFragment('26')} />
+                                <ListItemText primary={labelFragment('Age')} secondary={dataFragment(computeAge(this.state.personal.birthday))} />
                             </ListItem>
                             <Divider light />
                             <ListItem button>
-                                <ListItemText primary={labelFragment('Gender')} secondary={dataFragment('Male')} />
+                                <ListItemText primary={labelFragment('Gender')} secondary={dataFragment(getGender(this.state.personal.gender))} />
                             </ListItem>
                             <Divider light />
                             <ListItem button>
-                                <ListItemText primary={labelFragment('Civil status')} secondary={dataFragment('Single')} />
+                                <ListItemText primary={labelFragment('Civil status')} secondary={dataFragment(getCivilStatus(this.state.personal.civilStatus))} />
                             </ListItem>
                             <Divider light />
                             <ListItem button>
-                                <ListItemText primary={labelFragment('Nationality')} secondary={dataFragment('Filipino')} />
+                                <ListItemText primary={labelFragment('Nationality')} secondary={dataFragment(this.state.personal.nationality)} />
                             </ListItem>
                             <Divider light />
                             <ListItem button>
-                                <ListItemText primary={labelFragment('Religion')} secondary={dataFragment('Liminismo')} />
+                                <ListItemText primary={labelFragment('Religion')} secondary={dataFragment(this.state.personal.religion)} />
                             </ListItem>
                         </List>
                     </Paper>

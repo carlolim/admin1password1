@@ -65,10 +65,11 @@ class New extends Component {
     handlePictureSelect = (event) => {
         if (event.target.files.length > 0) {
             if ((/image\/(gif|jpe?g|tiff|png)$/i).test(event.target.files[0].type)) {
+                var file = event.target.files[0];
                 const pic =  URL.createObjectURL(event.target.files[0]);
                 const reader = new FileReader();
                 reader.onload = e => {
-                    this.setState({ pictureBlob: e.target.result, picture: pic, showRemovePicture: true });
+                    this.setState({ pictureBlob: file, picture: pic, showRemovePicture: true });
                 };
                 reader.readAsText(event.target.files[0]);
             }

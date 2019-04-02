@@ -55,15 +55,15 @@ class PersonalInfoInput extends Component {
                     className={this.props.classes.textField}
                     label="Last name"
                     margin="normal"
-                    value={this.props.data.middleName}
-                    onChange={this.props.change.bind(this, 'middleName')}
+                    value={this.props.data.lastName}
+                    onChange={this.props.change.bind(this, 'lastName')}
                 />
                 <TextField
                     className={this.props.classes.textField}
                     label="Contact number"
                     margin="normal"
-                    value={this.props.data.lastName}
-                    onChange={this.props.change.bind(this, 'lastName')}
+                    value={this.props.data.contact}
+                    onChange={this.props.change.bind(this, 'contact')}
                 />
                 <TextField
                     label="Birthday"

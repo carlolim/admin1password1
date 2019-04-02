@@ -17,59 +17,39 @@ const styles = theme => ({
     }
 });
 
-var shits;
-
 class Index extends Component {
     state = {
-        persons: [],
-        shit: ''
+        persons: []
     }
 
     componentDidMount = async () => {
         var persons = await selectAll("personal");
-        this.setState({persons});
+        this.setState({ persons });
     }
 
     showDetails = (id) => {
         this.props.history.push(`/personal/${id}`);
     }
 
-    hanldeDisplayPicture = (picture) => {
-        
-        var binaryData = []; 
-        binaryData.push(picture); 
-        var shit = URL.createObjectURL(new Blob(binaryData));
-        shits = shit;
-        console.log(shit);
-        return shit;
-
-        // if (picture instanceof Blob) {
-        //     const fileReaderInstance = new FileReader();
-        //     fileReaderInstance.onload = () => {
-        //         console.log(fileReaderInstance.result);
-        //         return fileReaderInstance.result;                
-        //     }
-        //     fileReaderInstance.readAsDataURL(picture); 
-        // }
-        // else {
-        //     return PicPlaceholder;
-        // }
-    }
+    handleDisplayPicture = (picture) => {
+        if (picture instanceof File) {
+            return URL.createObjectURL(picture);
+        }
+    };
 
     render() {
         return (
             <>
                 <Toolbar buttons={[]} title="Personal informations" />
                 <SearchBar />
-
                 <div className="content">
                     <List>
                         {this.state.persons.map((item, index) =>
-                            <ListItem button onClick={this.showDetails.bind(this, index)} key={index}>
+                            <ListItem button onClick={this.showDetails.bind(this, item.personalId)} key={index}>
                                 <ListItemAvatar>
-                                    <Avatar imgProps={{ onError: (e) => { e.target.src = PicPlaceholder; } }} src={this.hanldeDisplayPicture(item.picture)} />
+                                    <Avatar imgProps={{ onError: (e) => { e.target.src = PicPlaceholder; } }} src={this.handleDisplayPicture(item.picture)} />
                                 </ListItemAvatar>
-                                <ListItemText primary={`${item.firstName} ${item.lastName}`} />
+                                <ListItemText primary={item.description} secondary={`${item.firstName} ${item.lastName}`} />
                             </ListItem>
                         )}
                     </List>
