@@ -4,7 +4,8 @@ import PropTypes from 'prop-types';
 import { insert } from "../../data-access/generic";
 import {
     ExpansionPanel, ExpansionPanelSummary, Typography,
-    ExpansionPanelDetails, Avatar, Button, IconButton
+    ExpansionPanelDetails, Avatar, Button, IconButton,
+    Grid
 } from "@material-ui/core";
 import DoneIcon from "@material-ui/icons/Done";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -49,7 +50,7 @@ class New extends Component {
         expanded: null,
         picture: PicPlaceholder,
         pictureBlob: null,
-        showRemovePicture: false,
+        hasPicture: true,
         personal: {
             description: '', firstName: '', lastName: '', middleName: '', contact: '', birthday: '', picture: '', nationality: '', gender: 0, religion: '', civilStatus: 0,
             errors: { description: false, firstName: false }
@@ -66,17 +67,13 @@ class New extends Component {
         if (event.target.files.length > 0) {
             if ((/image\/(gif|jpe?g|tiff|png)$/i).test(event.target.files[0].type)) {
                 var file = event.target.files[0];
-                const pic =  URL.createObjectURL(event.target.files[0]);
-                const reader = new FileReader();
-                reader.onload = e => {
-                    this.setState({ pictureBlob: file, picture: pic, showRemovePicture: true });
-                };
-                reader.readAsText(event.target.files[0]);
+                const pic = URL.createObjectURL(file);
+                this.setState({ pictureBlob: file, picture: pic, hasPicture: true });
             }
         }
     }
 
-    handleRemovePicture = () => this.setState({ picture: PicPlaceholder, showRemovePicture: false });
+    handleRemovePicture = () => this.setState({ picture: PicPlaceholder, hasPicture: false });
 
     handleChangePersonalInfo = (property, e) => this.setState({ ...this.state, personal: { ...this.state.personal, [property]: e.target.value } });
 
@@ -102,7 +99,7 @@ class New extends Component {
             data.birthday = hasValue(data.birthday) ? new Date(data.birthday) : null;
             data.civilStatus = hasValue(data.civilStatus) ? Number(data.civilStatus) : 0;
             data.gender = hasValue(data.gender) ? Number(data.gender) : 0;
-            data.picture = this.state.pictureBlob;
+            data.picture = this.state.hasPicture ? this.state.pictureBlob : null;
             var result = await insert("personal", data);
             if (result) this.props.history.push('/personal');
         }
@@ -118,19 +115,27 @@ class New extends Component {
                 ]} title="New personal info" showBackButton={true} onBack={() => { this.props.history.goBack() }} />
                 <div className={this.props.classes.content}>
 
-                    <input capture onChange={this.handlePictureSelect.bind(this)} type="file" accept="image/*" id="inputImage" style={{ display: 'none' }} />
-
-                    <label htmlFor="inputImage">
-                        <Avatar
-                            src={this.state.picture}
-                            className={this.props.classes.bigAvatar}
-                        />
-                    </label>
-                    {this.state.showRemovePicture ?
-                        <div className={`text-center ${this.props.classes.padTop}`}>
-                            <Button onClick={this.handleRemovePicture} size="small" variant="contained" color="secondary">remove picture</Button>
-                        </div>
-                        : null}
+                    <Grid container spacing={0}>
+                        <Grid item xs={this.state.hasPicture ? 6 : 12}>
+                            <input capture onChange={this.handlePictureSelect.bind(this)} type="file" accept="image/*" id="inputImage" style={{ display: 'none' }} />
+                            <label htmlFor="inputImage">
+                                <Avatar
+                                    src={this.state.picture}
+                                    className={this.props.classes.bigAvatar}
+                                />
+                            </label>
+                            {this.state.hasPicture ?
+                                <div className={`text-center ${this.props.classes.padTop}`}>
+                                    <Button onClick={this.handleRemovePicture} size="small" variant="contained" color="secondary">remove picture</Button>
+                                </div>
+                                : null}
+                        </Grid>
+                        {this.state.hasPicture ?
+                            <Grid item xs={6}>
+                                <Typography variant="button">Detecting face...</Typography>
+                        </Grid>
+                            : null}
+                    </Grid>
 
                     <PersonalInfoInput data={this.state.personal} change={this.handleChangePersonalInfo} />
 

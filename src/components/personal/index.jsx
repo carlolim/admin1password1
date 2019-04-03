@@ -35,6 +35,7 @@ class Index extends Component {
         if (picture instanceof File) {
             return URL.createObjectURL(picture);
         }
+        return PicPlaceholder;
     };
 
     render() {
