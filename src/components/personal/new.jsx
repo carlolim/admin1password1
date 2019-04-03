@@ -19,6 +19,7 @@ import GovernmentInput from "../government/input";
 import WorkInput from "../work/input";
 import BankInput from "../bank/input";
 import { hasValue } from "../../helpers/functions";
+import { detectFaceSsdMobilenet } from "../../helpers/face-recognition";
 
 const styles = theme => ({
     bigAvatar: {
@@ -42,6 +43,10 @@ const styles = theme => ({
     accordionHeading: {
         paddingLeft: 20,
         paddingTop: 5
+    },
+    faceRecognitionMessage: {
+        textAlign: 'center',
+        paddingTop: 15
     }
 });
 
@@ -50,7 +55,9 @@ class New extends Component {
         expanded: null,
         picture: PicPlaceholder,
         pictureBlob: null,
-        hasPicture: true,
+        hasPicture: false,
+        faceDescriptor: null,
+        faceRecognitionMessage: '',
         personal: {
             description: '', firstName: '', lastName: '', middleName: '', contact: '', birthday: '', picture: '', nationality: '', gender: 0, religion: '', civilStatus: 0,
             errors: { description: false, firstName: false }
@@ -63,12 +70,20 @@ class New extends Component {
         });
     };
 
-    handlePictureSelect = (event) => {
+    handlePictureSelect = async (event) => {
         if (event.target.files.length > 0) {
             if ((/image\/(gif|jpe?g|tiff|png)$/i).test(event.target.files[0].type)) {
                 var file = event.target.files[0];
                 const pic = URL.createObjectURL(file);
-                this.setState({ pictureBlob: file, picture: pic, hasPicture: true });
+                this.setState({ pictureBlob: file, picture: pic, hasPicture: true, faceRecognitionMessage: 'Detecting face...' }, async () => {
+                    var results = await detectFaceSsdMobilenet(document.getElementById('picture'));
+                    if (results.length > 0) {
+                        this.setState({ ...this.state, faceDescriptor: results[0].detection, faceRecognitionMessage: 'Face detected' })
+                    }
+                    else {
+                        this.setState({...this.state, faceRecognitionMessage: 'No face detected'});
+                    }
+                });
             }
         }
     }
@@ -101,7 +116,12 @@ class New extends Component {
             data.gender = hasValue(data.gender) ? Number(data.gender) : 0;
             data.picture = this.state.hasPicture ? this.state.pictureBlob : null;
             var result = await insert("personal", data);
-            if (result) this.props.history.push('/personal');
+            console.log(result);
+            if (result > 0 && this.state.hasPicture && this.state.faceRecognitionMessage === 'Face detected') {
+                console.log( {personalId: result, value: this.state.faceDescriptor});
+                result = await insert("faceDescriptor", {personalId: result, value: this.state.faceDescriptor});
+                if (result > 0) this.props.history.push('/personal');
+            }
         }
     }
 
@@ -114,28 +134,22 @@ class New extends Component {
                     </IconButton>
                 ]} title="New personal info" showBackButton={true} onBack={() => { this.props.history.goBack() }} />
                 <div className={this.props.classes.content}>
-
-                    <Grid container spacing={0}>
-                        <Grid item xs={this.state.hasPicture ? 6 : 12}>
-                            <input capture onChange={this.handlePictureSelect.bind(this)} type="file" accept="image/*" id="inputImage" style={{ display: 'none' }} />
-                            <label htmlFor="inputImage">
-                                <Avatar
-                                    src={this.state.picture}
-                                    className={this.props.classes.bigAvatar}
-                                />
-                            </label>
-                            {this.state.hasPicture ?
-                                <div className={`text-center ${this.props.classes.padTop}`}>
-                                    <Button onClick={this.handleRemovePicture} size="small" variant="contained" color="secondary">remove picture</Button>
-                                </div>
-                                : null}
-                        </Grid>
-                        {this.state.hasPicture ?
-                            <Grid item xs={6}>
-                                <Typography variant="button">Detecting face...</Typography>
-                        </Grid>
-                            : null}
-                    </Grid>
+                    <input capture onChange={this.handlePictureSelect.bind(this)} type="file" accept="image/*" id="inputImage" style={{ display: 'none' }} />
+                    <label htmlFor="inputImage">
+                        <Avatar
+                            imgProps={{ id: "picture" }}
+                            src={this.state.picture}
+                            className={this.props.classes.bigAvatar}
+                        />
+                    </label>
+                    {this.state.hasPicture ?
+                        <>
+                            <div className={`text-center ${this.props.classes.padTop}`}>
+                                <Button onClick={this.handleRemovePicture} size="small" variant="contained" color="secondary">remove picture</Button>
+                            </div>
+                            <Typography className={this.props.classes.faceRecognitionMessage} variant="button">{this.state.faceRecognitionMessage}</Typography>
+                        </>
+                        : null}
 
                     <PersonalInfoInput data={this.state.personal} change={this.handleChangePersonalInfo} />
 

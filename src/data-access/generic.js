@@ -37,10 +37,10 @@ export const insert = (table, data) => {
             let store = tx.objectStore(table);
             store.put(data);
             tx.oncomplete = (event) => {
-                resolve(true);
+                resolve(event.target.result);
             }
             tx.onerror = (event) => {
-                reject(false);
+                reject(0);
             }
         }
     });

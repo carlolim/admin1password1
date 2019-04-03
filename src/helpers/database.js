@@ -1,5 +1,5 @@
 export const initialize = () => {
-    var request = window.indexedDB.open("Admin1Password1", 1);
+    var request = window.indexedDB.open("Admin1Password1", 2);
     
     request.onupgradeneeded = function(event) {
         var db = event.target.result;
@@ -17,6 +17,12 @@ export const initialize = () => {
             table.createIndex("gender", "gender", { unique: false });
             table.createIndex("religion", "religion", { unique: false });
             table.createIndex("civilStatus", "civilStatus", { unique: false });
+        }
+
+        if (!db.objectStoreNames.contains('faceDescriptor')) {
+            var table = db.createObjectStore("faceDescriptor", { keyPath: "faceDescriptorId", autoIncrement: true});
+            table.createIndex("personalId", "personalId", { unique: false });
+            table.createIndex("value", "value", { unique: false });
         }
 
         //SAMPLE UPGRADE
