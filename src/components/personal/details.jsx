@@ -1,19 +1,17 @@
 import React, { Component } from "react";
 import { withStyles } from "@material-ui/core/styles";
 import PropTypes from 'prop-types';
-import moment from "moment";
 import {
     Avatar, Typography, IconButton,
     List, ListItem, ListItemText, Divider, Paper
 } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import Toolbar from "../common/toolbar/toolbar-with-navigation";
-import PicPlaceholder from "../../images/user.png";
 import SearchBar from "../common/toolbar/searchbar";
 import NewRecord from "../common/new-record";
 import { selectById } from "../../data-access/generic";
 import { formatDate, hasValue, computeAge, getGender, getCivilStatus } from "../../helpers/functions";
-import { genderEnum, civilStatusEnum } from "../../helpers/enums";
+
 
 const styles = theme => ({
     bigAvatar: {
@@ -30,7 +28,7 @@ const styles = theme => ({
 class PersonalInfo extends Component {
     state = {
         personal: {
-            picture: '', description: '', firstName: '', lastName: '', middleName: '', contact: '', birthday: '', picture: '', nationality: '', gender: 0, religion: '', civilStatus: 0
+            description: '', firstName: '', lastName: '', middleName: '', contact: '', birthday: '', picture: '', nationality: '', gender: 0, religion: '', civilStatus: 0
         }
     }
 

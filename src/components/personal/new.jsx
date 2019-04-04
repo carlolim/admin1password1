@@ -4,8 +4,7 @@ import PropTypes from 'prop-types';
 import { insert } from "../../data-access/generic";
 import {
     ExpansionPanel, ExpansionPanelSummary, Typography,
-    ExpansionPanelDetails, Avatar, Button, IconButton,
-    Grid
+    ExpansionPanelDetails, Avatar, Button, IconButton
 } from "@material-ui/core";
 import DoneIcon from "@material-ui/icons/Done";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';

@@ -5,7 +5,7 @@ export const initialize = () => {
         var db = event.target.result;
 
         if (!db.objectStoreNames.contains('personal')) {
-            var table = db.createObjectStore("personal", { keyPath: "personalId", autoIncrement: true });
+            let table = db.createObjectStore("personal", { keyPath: "personalId", autoIncrement: true });
             table.createIndex("description", "description", { unique: false });
             table.createIndex("firstName", "firstName", { unique: false });
             table.createIndex("lastName", "lastName", { unique: false });
@@ -20,7 +20,7 @@ export const initialize = () => {
         }
 
         if (!db.objectStoreNames.contains('faceDescriptor')) {
-            var table = db.createObjectStore("faceDescriptor", { keyPath: "faceDescriptorId", autoIncrement: true});
+            let table = db.createObjectStore("faceDescriptor", { keyPath: "faceDescriptorId", autoIncrement: true});
             table.createIndex("personalId", "personalId", { unique: false });
             table.createIndex("value", "value", { unique: false });
         }
