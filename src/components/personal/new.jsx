@@ -72,18 +72,17 @@ class New extends Component {
 
     handlePictureSelect = async (event) => {
         if (event.target.files.length > 0) {
-            if ((/image\/(gif|jpe?g|tiff|png)$/i).test(event.target.files[0].type)) {
+            if ((/image\/(gif|jpe?g|png)$/i).test(event.target.files[0].type)) {
                 var file = event.target.files[0];
                 const pic = URL.createObjectURL(file);
-                this.setState({ pictureBlob: file, picture: pic, hasPicture: true, faceRecognitionMessage: 'Detecting face...' }, async () => {
-                    var results = await detectFaceSsdMobilenet(document.getElementById('picture'));
-                    if (results.length > 0) {
-                        this.setState({ ...this.state, faceDescriptor: results[0].detection, faceRecognitionMessage: 'Face detected' })
-                    }
-                    else {
-                        this.setState({...this.state, faceRecognitionMessage: 'No face detected'});
-                    }
-                });
+                this.setState({ pictureBlob: file, picture: pic, hasPicture: true, faceRecognitionMessage: 'Detecting face...' });
+                var results = await detectFaceSsdMobilenet(document.getElementById('picture'));
+                if (results.length > 0) {
+                    this.setState({ ...this.state, faceDescriptor: results[0].detection, faceRecognitionMessage: 'Face detected' })
+                }
+                else {
+                    this.setState({ ...this.state, faceRecognitionMessage: 'No face detected' });
+                }
             }
         }
     }
@@ -118,8 +117,7 @@ class New extends Component {
             var result = await insert("personal", data);
             console.log(result);
             if (result > 0 && this.state.hasPicture && this.state.faceRecognitionMessage === 'Face detected') {
-                console.log( {personalId: result, value: this.state.faceDescriptor});
-                result = await insert("faceDescriptor", {personalId: result, value: this.state.faceDescriptor});
+                result = await insert("faceDescriptor", { personalId: result, value: this.state.faceDescriptor });
                 if (result > 0) this.props.history.push('/personal');
             }
         }

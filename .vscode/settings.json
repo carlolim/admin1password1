@@ -1,0 +1,16 @@
+{
+    "sqltools.connections": [
+        {
+            "askForPassword": false,
+            "connectionTimeout": 30,
+            "database": "HRISMaster",
+            "dialect": "MSSQL",
+            "domain": null,
+            "name": "asd",
+            "password": "8Waystop",
+            "port": 1433,
+            "server": "SPRD-3GWHHJ2",
+            "username": "sa"
+        }
+    ]
+}

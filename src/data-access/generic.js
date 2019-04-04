@@ -35,11 +35,11 @@ export const insert = (table, data) => {
         db.onsuccess = (event) => {
             let tx = event.target.result.transaction([table], "readwrite");
             let store = tx.objectStore(table);
-            store.put(data);
-            tx.oncomplete = (event) => {
+            var request = store.put(data);
+            request.onsuccess = (event) => {
                 resolve(event.target.result);
             }
-            tx.onerror = (event) => {
+            request.onerror = (event) => {
                 reject(0);
             }
         }
