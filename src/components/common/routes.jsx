@@ -4,7 +4,7 @@ import DashboardIndex from "../dashboard/dashboard-index";
 import PersonalInfo from "../personal/details";
 import PersonalInfoList from "../personal/index";
 import NewPersonalInfo from "../personal/new";
-
+import Search from "../facerecognition/search";
 
 class Routes extends Component {
     render() {
@@ -14,6 +14,7 @@ class Routes extends Component {
             <Route exact path='/personal' component={PersonalInfoList}/>
             <Route exact path='/personal/new' component={NewPersonalInfo}/>
             <Route exact path='/personal/:id' component={PersonalInfo}/>
+            <Route exact path='/facerecognition/search' component={Search}/>
         </Switch>
       );
     }

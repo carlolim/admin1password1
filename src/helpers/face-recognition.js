@@ -27,5 +27,5 @@ export const detectFaceSsdMobilenet = async (element) => {
     await faceapi.loadSsdMobilenetv1Model(model_url)
     await faceapi.loadFaceLandmarkModel(model_url)
     await faceapi.loadFaceRecognitionModel(model_url)
-    return await faceapi.detectAllFaces(element).withFaceLandmarks().withFaceDescriptors();
+    return await faceapi.detectSingleFace(element).withFaceLandmarks().withFaceDescriptors();
 }

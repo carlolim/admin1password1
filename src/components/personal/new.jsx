@@ -77,7 +77,7 @@ class New extends Component {
                 this.setState({ pictureBlob: file, picture: pic, hasPicture: true, faceRecognitionMessage: 'Detecting face...' });
                 var results = await detectFaceSsdMobilenet(document.getElementById('picture'));
                 if (results.length > 0) {
-                    this.setState({ ...this.state, faceDescriptor: results[0].detection, faceRecognitionMessage: 'Face detected' })
+                    this.setState({ ...this.state, faceDescriptor: results[0], faceRecognitionMessage: 'Face detected' })
                 }
                 else {
                     this.setState({ ...this.state, faceRecognitionMessage: 'No face detected' });
@@ -118,6 +118,9 @@ class New extends Component {
             if (result > 0 && this.state.hasPicture && this.state.faceRecognitionMessage === 'Face detected') {
                 result = await insert("faceDescriptor", { personalId: result, value: this.state.faceDescriptor });
                 if (result > 0) this.props.history.push('/personal');
+            }
+            else if (result > 0) {
+                this.props.history.push('/personal');
             }
         }
     }
