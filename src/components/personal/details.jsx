@@ -9,7 +9,7 @@ import EditIcon from "@material-ui/icons/Edit";
 import Toolbar from "../common/toolbar/toolbar-with-navigation";
 import SearchBar from "../common/toolbar/searchbar";
 import NewRecord from "../common/new-record";
-import { selectById } from "../../data-access/generic";
+import { selectById, selectWhere } from "../../data-access/generic";
 import { formatDate, hasValue, computeAge, getGender, getCivilStatus } from "../../helpers/functions";
 
 
@@ -29,13 +29,30 @@ class PersonalInfo extends Component {
     state = {
         personal: {
             description: '', firstName: '', lastName: '', middleName: '', contact: '', birthday: '', picture: '', nationality: '', gender: 0, religion: '', civilStatus: 0
-        }
+        },
+        government: { governmentId: 0, description: '', sss: '', tin: '', philHealth: '', pagibig: '', prc: '', passport: '', taxStatus: '' },
+        address: { addressId: 0 },
+        contact: { contactId: 0 },
+        work: { workId: 0, description: '', jobTitle: '', employmentStatus: '', dateFrom: '', dateTo: '', isPresent: false, company: '', companyAdress: '', companyContact: '' },
+        bank: { bankId: 0, description: '', bankName: '', accountType: '', accountNumber: '', }
     }
 
     componentDidMount = async () => {
         var personal = await selectById("personal", Number(this.props.match.params.id));
+        var government = await selectWhere("government", "personalId", personal.personalId);
+        var work = await selectWhere("work", "personalId", personal.personalId);
+        var bank = await selectWhere("bank", "personalId", personal.personalId);
         if (hasValue(personal)) {
             this.setState({ ...this.state, personal });
+        }
+        if (hasValue(government)) {
+            this.setState({ ...this.state, government });
+        }
+        if (hasValue(work)) {
+            this.setState({ ...this.state, work });
+        }
+        if (hasValue(bank)) {
+            this.setState({ ...this.state, bank });
         }
     }
 
@@ -98,146 +115,152 @@ class PersonalInfo extends Component {
                         </List>
                     </Paper>
 
-                    <Paper className={this.props.classes.paper} elevation={1}>
-                        <Typography variant="h6" align="center">Address</Typography>
-                        <List component="nav">
-                            <ListItem button>
-                                <ListItemText primary={labelFragment('Room./Floor./Unit no. & Building name')} secondary={dataFragment('')} />
-                            </ListItem>
-                            <Divider light />
-                            <ListItem button>
-                                <ListItemText primary={labelFragment('House/Lot & Block no.')} secondary={dataFragment('Lot 27 Block 1')} />
-                            </ListItem>
-                            <Divider light />
-                            <ListItem button>
-                                <ListItemText primary={labelFragment('Street')} secondary={dataFragment('Oak street')} />
-                            </ListItem>
-                            <Divider light />
-                            <ListItem button>
-                                <ListItemText primary={labelFragment('Subdivision')} secondary={dataFragment('2 Verde Rosa')} />
-                            </ListItem>
-                            <Divider light />
-                            <ListItem button>
-                                <ListItemText primary={labelFragment('Barangay/District/Locality')} secondary={dataFragment('United Bayanihan')} />
-                            </ListItem>
-                            <Divider light />
-                            <ListItem button>
-                                <ListItemText primary={labelFragment('City/Municipality')} secondary={dataFragment('San Pedro')} />
-                            </ListItem>
-                            <Divider light />
-                            <ListItem button>
-                                <ListItemText primary={labelFragment('Province')} secondary={dataFragment('Laguna')} />
-                            </ListItem>
-                            <Divider light />
-                            <ListItem button>
-                                <ListItemText primary={labelFragment('Country')} secondary={dataFragment('Philippines')} />
-                            </ListItem>
-                            <Divider light />
-                            <ListItem button>
-                                <ListItemText primary={labelFragment('Zip code')} secondary={dataFragment('1234')} />
-                            </ListItem>
-                        </List>
-                    </Paper>
+                    {this.state.address.addressId !== 0 ?
+                        <Paper className={this.props.classes.paper} elevation={1}>
+                            <Typography variant="h6" align="center">Address</Typography>
+                            <List component="nav">
+                                <ListItem button>
+                                    <ListItemText primary={labelFragment('Room./Floor./Unit no. & Building name')} secondary={dataFragment('')} />
+                                </ListItem>
+                                <Divider light />
+                                <ListItem button>
+                                    <ListItemText primary={labelFragment('House/Lot & Block no.')} secondary={dataFragment('Lot 27 Block 1')} />
+                                </ListItem>
+                                <Divider light />
+                                <ListItem button>
+                                    <ListItemText primary={labelFragment('Street')} secondary={dataFragment('Oak street')} />
+                                </ListItem>
+                                <Divider light />
+                                <ListItem button>
+                                    <ListItemText primary={labelFragment('Subdivision')} secondary={dataFragment('2 Verde Rosa')} />
+                                </ListItem>
+                                <Divider light />
+                                <ListItem button>
+                                    <ListItemText primary={labelFragment('Barangay/District/Locality')} secondary={dataFragment('United Bayanihan')} />
+                                </ListItem>
+                                <Divider light />
+                                <ListItem button>
+                                    <ListItemText primary={labelFragment('City/Municipality')} secondary={dataFragment('San Pedro')} />
+                                </ListItem>
+                                <Divider light />
+                                <ListItem button>
+                                    <ListItemText primary={labelFragment('Province')} secondary={dataFragment('Laguna')} />
+                                </ListItem>
+                                <Divider light />
+                                <ListItem button>
+                                    <ListItemText primary={labelFragment('Country')} secondary={dataFragment('Philippines')} />
+                                </ListItem>
+                                <Divider light />
+                                <ListItem button>
+                                    <ListItemText primary={labelFragment('Zip code')} secondary={dataFragment('1234')} />
+                                </ListItem>
+                            </List>
+                        </Paper>
+                        : null}
 
-                    <Paper className={this.props.classes.paper} elevation={1}>
-                        <Typography variant="h6" align="center">Contact Details</Typography>
-                        <List component="nav">
-                            <ListItem button>
-                                <ListItemText primary={labelFragment('Mobile')} secondary={dataFragment('09668274645')} />
-                            </ListItem>
-                            <Divider light />
-                            <ListItem button>
-                                <ListItemText primary={labelFragment('Landline')} secondary={dataFragment('(02)-275-8120')} />
-                            </ListItem>
-                            <Divider light />
-                            <ListItem button>
-                                <ListItemText primary={labelFragment('Email')} secondary={dataFragment('carlojameslim1@gmail.com')} />
-                            </ListItem>
-                        </List>
-                    </Paper>
+                    {this.state.contact.contactId !== 0 ?
+                        <Paper className={this.props.classes.paper} elevation={1}>
+                            <Typography variant="h6" align="center">Contact Details</Typography>
+                            <List component="nav">
+                                <ListItem button>
+                                    <ListItemText primary={labelFragment('Mobile')} secondary={dataFragment('09668274645')} />
+                                </ListItem>
+                                <Divider light />
+                                <ListItem button>
+                                    <ListItemText primary={labelFragment('Landline')} secondary={dataFragment('(02)-275-8120')} />
+                                </ListItem>
+                                <Divider light />
+                                <ListItem button>
+                                    <ListItemText primary={labelFragment('Email')} secondary={dataFragment('carlojameslim1@gmail.com')} />
+                                </ListItem>
+                            </List>
+                        </Paper>
+                        : null}
 
-                    <Paper className={this.props.classes.paper} elevation={1}>
-                        <Typography variant="h6" align="center">Government Details</Typography>
-                        <List component="nav">
-                            <ListItem button>
-                                <ListItemText primary={labelFragment('SSS No.')} secondary={dataFragment('3444002483')} />
-                            </ListItem>
-                            <Divider light />
-                            <ListItem button>
-                                <ListItemText primary={labelFragment('TIN')} secondary={dataFragment('457751996000')} />
-                            </ListItem>
-                            <Divider light />
-                            <ListItem button>
-                                <ListItemText primary={labelFragment('PhilHealth No')} secondary={dataFragment('102000118983')} />
-                            </ListItem>
-                            <Divider light />
-                            <ListItem button>
-                                <ListItemText primary={labelFragment('Pagibig/HDMF No.')} secondary={dataFragment('121113889418')} />
-                            </ListItem>
-                            <Divider light />
-                            <ListItem button>
-                                <ListItemText primary={labelFragment('PRC License No.')} secondary={dataFragment('')} />
-                            </ListItem>
-                            <Divider light />
-                            <ListItem button>
-                                <ListItemText primary={labelFragment('Passport No.')} secondary={dataFragment('')} />
-                            </ListItem>
-                            <Divider light />
-                            <ListItem button>
-                                <ListItemText primary={labelFragment('Tax Status')} secondary={dataFragment('S')} />
-                            </ListItem>
-                        </List>
-                    </Paper>
+                    {this.state.government.governmentId !== 0 ?
+                        <Paper className={this.props.classes.paper} elevation={1}>
+                            <Typography variant="h6" align="center">Government Details</Typography>
+                            <List component="nav">
+                                <ListItem button>
+                                    <ListItemText primary={labelFragment('SSS No.')} secondary={dataFragment(this.state.government.sss)} />
+                                </ListItem>
+                                <Divider light />
+                                <ListItem button>
+                                    <ListItemText primary={labelFragment('TIN')} secondary={dataFragment(this.state.government.tin)} />
+                                </ListItem>
+                                <Divider light />
+                                <ListItem button>
+                                    <ListItemText primary={labelFragment('PhilHealth No')} secondary={dataFragment(this.state.government.philHealth)} />
+                                </ListItem>
+                                <Divider light />
+                                <ListItem button>
+                                    <ListItemText primary={labelFragment('Pagibig/HDMF No.')} secondary={dataFragment(this.state.government.pagibig)} />
+                                </ListItem>
+                                <Divider light />
+                                <ListItem button>
+                                    <ListItemText primary={labelFragment('PRC License No.')} secondary={dataFragment(this.state.government.prc)} />
+                                </ListItem>
+                                <Divider light />
+                                <ListItem button>
+                                    <ListItemText primary={labelFragment('Passport No.')} secondary={dataFragment(this.state.government.passport)} />
+                                </ListItem>
+                                <Divider light />
+                                <ListItem button>
+                                    <ListItemText primary={labelFragment('Tax Status')} secondary={dataFragment(this.state.government.taxStatus)} />
+                                </ListItem>
+                            </List>
+                        </Paper>
+                        : null}
 
-                    <Paper className={this.props.classes.paper} elevation={1}>
-                        <Typography variant="h6" align="center">Work Information</Typography>
-                        <List component="nav">
-                            <ListItem button>
-                                <ListItemText primary={labelFragment('Job Title')} secondary={dataFragment('Lead Software Engineer')} />
-                            </ListItem>
-                            <Divider light />
-                            <ListItem button>
-                                <ListItemText primary={labelFragment('Employment Status')} secondary={dataFragment('Regular')} />
-                            </ListItem>
-                            <Divider light />
-                            <ListItem button>
-                                <ListItemText primary={labelFragment('Hire date')} secondary={dataFragment('April 27, 2015')} />
-                            </ListItem>
-                            <Divider light />
-                            <ListItem button>
-                                <ListItemText primary={labelFragment('Years/Month in service')} secondary={dataFragment('3 years 11 months')} />
-                            </ListItem>
-                            <Divider light />
-                            <ListItem button>
-                                <ListItemText primary={labelFragment('Employer/Business name')} secondary={dataFragment('Sprout Solutions Philippines Inc.')} />
-                            </ListItem>
-                            <Divider light />
-                            <ListItem button>
-                                <ListItemText primary={labelFragment('Employer/Business address')} secondary={dataFragment('11th floor Cyber Sigma, Mckinley west Lawton Ave. Taguig City')} />
-                            </ListItem>
-                            <Divider light />
-                            <ListItem button>
-                                <ListItemText primary={labelFragment('Employer/Business Contact no.')} secondary={dataFragment('')} />
-                            </ListItem>
-                        </List>
-                    </Paper>
+                    {this.state.work.workId !== 0 ?
+                        <Paper className={this.props.classes.paper} elevation={1}>
+                            <Typography variant="h6" align="center">Work Information</Typography>
+                            <List component="nav">
+                                <ListItem button>
+                                    <ListItemText primary={labelFragment('Job Title')} secondary={dataFragment(this.state.work.jobTitle)} />
+                                </ListItem>
+                                <Divider light />
+                                <ListItem button>
+                                    <ListItemText primary={labelFragment('Employment Status')} secondary={dataFragment(this.state.work.employmentStatus)} />
+                                </ListItem>
+                                <Divider light />
+                                <ListItem button>
+                                    <ListItemText primary={labelFragment('Hire date')} secondary={dataFragment(`${this.state.work.dateFrom} - ${(this.state.work.isPresent ? 'present' : this.state.work.dateTo)}`)} />
+                                </ListItem>
+                                <Divider light />
+                                <ListItem button>
+                                    <ListItemText primary={labelFragment('Company/Employer/Business name')} secondary={dataFragment(this.state.work.company)} />
+                                </ListItem>
+                                <Divider light />
+                                <ListItem button>
+                                    <ListItemText primary={labelFragment('Company/Employer/Business address')} secondary={dataFragment(this.state.work.companyAdress)} />
+                                </ListItem>
+                                <Divider light />
+                                <ListItem button>
+                                    <ListItemText primary={labelFragment('Company/Employer/Business Contact no.')} secondary={dataFragment(this.state.work.companyContact)} />
+                                </ListItem>
+                            </List>
+                        </Paper>
+                        : null}
 
-                    <Paper className={this.props.classes.paper} elevation={1}>
-                        <Typography variant="h6" align="center">Bank Details</Typography>
-                        <List component="nav">
-                            <ListItem button>
-                                <ListItemText primary={labelFragment('Bank name')} secondary={dataFragment('BDO')} />
-                            </ListItem>
-                            <Divider light />
-                            <ListItem button>
-                                <ListItemText primary={labelFragment('Type of Account')} secondary={dataFragment('Savings')} />
-                            </ListItem>
-                            <Divider light />
-                            <ListItem button>
-                                <ListItemText primary={labelFragment('Account number')} secondary={dataFragment('00123456789')} />
-                            </ListItem>
-                        </List>
-                    </Paper>
+                    {this.state.bank.bankId !== 0 ?
+                        <Paper className={this.props.classes.paper} elevation={1}>
+                            <Typography variant="h6" align="center">Bank Details</Typography>
+                            <List component="nav">
+                                <ListItem button>
+                                    <ListItemText primary={labelFragment('Bank name')} secondary={dataFragment(this.state.bank.bankName)} />
+                                </ListItem>
+                                <Divider light />
+                                <ListItem button>
+                                    <ListItemText primary={labelFragment('Type of Account')} secondary={dataFragment(this.state.bank.accountType)} />
+                                </ListItem>
+                                <Divider light />
+                                <ListItem button>
+                                    <ListItemText primary={labelFragment('Account number')} secondary={dataFragment(this.state.bank.accountNumber)} />
+                                </ListItem>
+                            </List>
+                        </Paper>
+                        : null}
                 </div>
                 <NewRecord />
             </>

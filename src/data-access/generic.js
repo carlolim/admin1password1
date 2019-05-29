@@ -1,3 +1,5 @@
+import { hasValue } from "../helpers/functions";
+
 const databaseName = "Admin1Password1";
 
 
@@ -76,6 +78,27 @@ export const remove = (table, id) => {
             }
             tx.onerror = (event) => {
                 reject(false);
+            }
+        }
+    });
+}
+
+export const selectWhere = (table, field, value) => {
+    return new Promise((resolve, reject) => {
+        let db = indexedDB.open(databaseName);
+        db.onsuccess = (event) => {
+            var range = IDBKeyRange.bound(value, value);
+            var tx = event.target.result.transaction([table], "readonly");
+            let store = tx.objectStore(table);
+            var request = store.index(field).openCursor(range);
+            request.onsuccess = (event) => {
+                if (hasValue(event.target.result))
+                    resolve(event.target.result.value);
+                else
+                    resolve(null);
+            }
+            request.onfailure = (event) => {
+                reject(null);
             }
         }
     });

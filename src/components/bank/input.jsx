@@ -25,18 +25,32 @@ class BankInput extends Component {
             <>
                 <TextField
                     className={this.props.classes.textField}
+                    label="Description"
+                    margin="normal"
+                    error={this.props.data.errors.description}
+                    value={this.props.data.description}
+                    onChange={this.props.change.bind(this, 'description')}
+                />
+                <TextField
+                    className={this.props.classes.textField}
                     label="Bank name"
                     margin="normal"
+                    value={this.props.data.bankName}
+                    onChange={this.props.change.bind(this, 'bankName')}
                 />
                 <TextField
                     className={this.props.classes.textField}
                     label="Type of Account"
                     margin="normal"
+                    value={this.props.data.accountType}
+                    onChange={this.props.change.bind(this, 'accountType')}
                 />
                 <TextField
                     className={this.props.classes.textField}
                     label="Account number"
                     margin="normal"
+                    value={this.props.data.accountNumber}
+                    onChange={this.props.change.bind(this, 'accountNumber')}
                 />
             </>
         )

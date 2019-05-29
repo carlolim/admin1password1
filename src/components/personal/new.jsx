@@ -60,6 +60,18 @@ class New extends Component {
         personal: {
             description: '', firstName: '', lastName: '', middleName: '', contact: '', birthday: '', picture: '', nationality: '', gender: 0, religion: '', civilStatus: 0,
             errors: { description: false, firstName: false }
+        },
+        government: {
+            description: '', sss: '', tin: '', philHealth: '', pagibig: '', prc: '', passport: '', taxStatus: '',
+            errors: { description: false }
+        },
+        work: {
+            description: '', jobTitle: '', employmentStatus: '', dateFrom: '', dateTo: '', isPresent: false, company: '', companyAdress: '', companyContact: '',
+            errors: { description: false }
+        },
+        bank: {
+            description: '', bankName: '', accountType: '', accountNumber: '',
+            errors: { description: false }
         }
     }
 
@@ -74,21 +86,40 @@ class New extends Component {
             if ((/image\/(gif|jpe?g|png)$/i).test(event.target.files[0].type)) {
                 var file = event.target.files[0];
                 const pic = URL.createObjectURL(file);
-                this.setState({ pictureBlob: file, picture: pic, hasPicture: true, faceRecognitionMessage: 'Detecting face...' });
-                var results = await detectFaceSsdMobilenet(document.getElementById('picture'));
-                if (results.length > 0) {
-                    this.setState({ ...this.state, faceDescriptor: results[0], faceRecognitionMessage: 'Face detected' })
-                }
-                else {
-                    this.setState({ ...this.state, faceRecognitionMessage: 'No face detected' });
-                }
+                this.setState({ pictureBlob: file, picture: pic, hasPicture: true, faceRecognitionMessage: '' });
+                // var results = await detectFaceSsdMobilenet(document.getElementById('picture'));
+                // if (results.length > 0) {
+                //     this.setState({ ...this.state, faceDescriptor: results[0], faceRecognitionMessage: 'Face detected' })
+                // }
+                // else {
+                //     this.setState({ ...this.state, faceRecognitionMessage: 'No face detected' });
+                // }
             }
         }
     }
 
     handleRemovePicture = () => this.setState({ picture: PicPlaceholder, hasPicture: false });
 
-    handleChangePersonalInfo = (property, e) => this.setState({ ...this.state, personal: { ...this.state.personal, [property]: e.target.value } });
+    handleChangePersonalInfo = (property, e) => {
+        var stateCopy = this.state;
+        stateCopy.personal[property] = e.target.value;
+        this.setState({ ...stateCopy });
+    }
+    handleChangeGovernmentInfo = (property, e) => {
+        var stateCopy = this.state;
+        stateCopy.government[property] = e.target.value;
+        this.setState({ ...stateCopy });
+    }
+    handleChangeWorkInfo = (property, e) => {
+        var stateCopy = this.state;
+        stateCopy.work[property] = e.target.value;
+        this.setState({ ...stateCopy });
+    }
+    handleChangeBankInfo = (property, e) => {
+        var stateCopy = this.state;
+        stateCopy.bank[property] = e.target.value;
+        this.setState({ ...stateCopy });
+    }
 
     handleSave = async () => {
         var data = this.state.personal;
@@ -114,12 +145,25 @@ class New extends Component {
             data.gender = hasValue(data.gender) ? Number(data.gender) : 0;
             data.picture = this.state.hasPicture ? this.state.pictureBlob : null;
             var result = await insert("personal", data);
-            console.log(result);
-            if (result > 0 && this.state.hasPicture && this.state.faceRecognitionMessage === 'Face detected') {
-                result = await insert("faceDescriptor", { personalId: result, value: this.state.faceDescriptor });
-                if (result > 0) this.props.history.push('/personal');
-            }
-            else if (result > 0) {
+            if (result > 0) {
+                if (hasValue(this.state.government.description)) {
+                    var governmentData = this.state.government;
+                    governmentData.personalId = result;
+                    delete governmentData.errors;
+                    await insert("government", governmentData);
+                }
+                if (hasValue(this.state.work.description)) {
+                    var workData = this.state.work;
+                    workData.personalId = result;
+                    delete workData.errors;
+                    await insert("work", workData);
+                }
+                if (hasValue(this.state.bank.description)) {
+                    var bankData = this.state.bank;
+                    bankData.personalId = result;
+                    delete bankData.errors;
+                    await insert("bank", bankData);
+                }
                 this.props.history.push('/personal');
             }
         }
@@ -160,7 +204,7 @@ class New extends Component {
                                 <Typography variant="button" className={this.props.classes.accordionHeading}>Government info</Typography>
                             </ExpansionPanelSummary>
                             <ExpansionPanelDetails className="display-block">
-                                <GovernmentInput />
+                                <GovernmentInput data={this.state.government} change={this.handleChangeGovernmentInfo} />
                             </ExpansionPanelDetails>
                         </ExpansionPanel>
                         <ExpansionPanel expanded={this.state.expanded === 'panel2'} onChange={this.handleAccordionChange('panel2')}>
@@ -169,7 +213,7 @@ class New extends Component {
                                 <Typography variant="button" className={this.props.classes.accordionHeading}>Work info</Typography>
                             </ExpansionPanelSummary>
                             <ExpansionPanelDetails className="display-block">
-                                <WorkInput />
+                                <WorkInput data={this.state.work} change={this.handleChangeWorkInfo} />
                             </ExpansionPanelDetails>
                         </ExpansionPanel>
                         <ExpansionPanel expanded={this.state.expanded === 'panel3'} onChange={this.handleAccordionChange('panel3')}>
@@ -178,7 +222,7 @@ class New extends Component {
                                 <Typography variant="button" className={this.props.classes.accordionHeading}>Bank accounts</Typography>
                             </ExpansionPanelSummary>
                             <ExpansionPanelDetails className="display-block">
-                                <BankInput />
+                                <BankInput data={this.state.bank} change={this.handleChangeBankInfo} />
                             </ExpansionPanelDetails>
                         </ExpansionPanel>
                     </div>
